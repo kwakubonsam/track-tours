@@ -3,7 +3,6 @@ Do you want to get updates about when your favorite artists are playing shows in
 
 
 ## Requirements
-- Chrome Browser
 - [Python3](https://www.python.org/)
 - An email account(preferably Gmail)
 - App password. More about that here: https://support.google.com/accounts/answer/185833?hl=en
@@ -26,4 +25,4 @@ Do you want to get updates about when your favorite artists are playing shows in
 # TODO
 - Create an efficient machanism to prevent unnecessary emails.
 - Make it more non-programmer user friendly?
-- Make it more background-run friendly
+- Make it more background-run friendly?

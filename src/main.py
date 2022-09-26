@@ -11,8 +11,7 @@ template_env = Environment(
     loader = FileSystemLoader("template"),
     autoescape=select_autoescape()
 )
-foundConcerts, prevFoundConcerts={},{}
-artists = {
+ARTISTS = {
     "The_Weeknd": "https://www.theweeknd.com/tour",
     "Florence":"https://florenceandthemachine.net",
     "Remi_Wolf":"https://remiwolf.com/pages/tour",
@@ -20,8 +19,9 @@ artists = {
     "Sharon": "https://www.sharonvanetten.com/tour",
     "Alice_Lou": "https://www.alicephoebelou.com/concerts.php"
 }
-desired_locations = ["Durham","Raleigh","Baltimore","Richmond","Los Angeles"]
+DESIRED_LOCATIONS = ["Durham","Raleigh","Baltimore","Richmond","Los Angeles"]
 WAIT_TIME = 86400
+foundConcerts, prevFoundConcerts={},{}
 
 def sendEmail(email_body):
     msg = EmailMessage()
@@ -51,27 +51,29 @@ def findConcerts(artist,url,driver):
     divs = soup.find_all('div')
 
     for link in links:
-        for location in desired_locations:
+        for location in DESIRED_LOCATIONS:
             if location.lower() in link.text.lower():
                 foundConcerts[artist] = {"location": location,"url":url}
                 return
 
     for span in spans:
-        for location in desired_locations:
+        for location in DESIRED_LOCATIONS:
             if location.lower() in span.text.lower():
                 foundConcerts[artist] = {"location": location,"url":url}
                 return
 
     for div in divs:
-        for location in desired_locations:
+        for location in DESIRED_LOCATIONS:
             if location.lower() in div.text.lower():
                 foundConcerts[artist] = {"location": location,"url":url}
                 return
 
 def main():
-    browser_driver = webdriver.Chrome(service=ChromiumService(ChromeDriverManager(chrome_type=ChromeType.CHROMIUM).install()))
-    for artist in artists:
-        findConcerts(artist,artists[artist],browser_driver)
+    op = webdriver.ChromeOptions()
+    op.add_argument('headless') #To prevent browser window from opening
+    browser_driver = webdriver.Chrome(options=op,service=ChromiumService(ChromeDriverManager(chrome_type=ChromeType.CHROMIUM).install()))
+    for artist in ARTISTS:
+        findConcerts(artist,ARTISTS[artist],browser_driver)
     browser_driver.quit() 
     template = template_env.get_template("./emailtemplate.html")
 
